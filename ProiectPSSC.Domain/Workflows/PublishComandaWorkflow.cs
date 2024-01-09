@@ -60,7 +60,7 @@ namespace ProiectPSSC.Domain.Workflows
             
             return await result.Match(
                     Left: orders => GenerateFailedEvent(orders) as IComandaPublishedEvent,
-                    Right: publishedOrders => {  facturareWorkflowv2.ExecuteWorkflowSync(publishedOrders); livrareWorkflow.ExecuteWorkflowSync(publishedOrders); return new ComandaPublishScucceededEvent(publishedOrders.Csv, publishedOrders.PublishedDate); }
+                    Right:publishedOrders => {facturareWorkflowv2.ExecuteWorkflowAsync(publishedOrders).ToAsync();livrareWorkflow.ExecuteWorkflowAsync(publishedOrders).ToAsync(); return new ComandaPublishScucceededEvent(publishedOrders.Csv, publishedOrders.PublishedDate); }
             );
         }
 

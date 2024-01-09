@@ -16,7 +16,7 @@ namespace ProiectPSSC.Domain.Workflows
 {
     public class FacturareWorkflowv2
     {
-         public Either<IComenzi, PublishedOrders> ExecuteWorkflowSync(PublishedOrders publishedOrders)
+         public async Task<Either<IComenzi, PublishedOrders>> ExecuteWorkflowAsync(PublishedOrders publishedOrders)
         {
             string numeproduse= "";
             var nume = publishedOrders.CommandList.Select(order => order.Nume);
@@ -30,7 +30,7 @@ namespace ProiectPSSC.Domain.Workflows
             var cantitate = CalculateTotalQuantity(publishedOrders,nume).ToString();
             var suma= CalculateTotalAmount(publishedOrders,nume).ToString();
             string[] file = {"Nume: "+ nume.ElementAt(0).ToString(),"Produse:" + numeproduse.ToString(),"Adresa: " + Adresa.ElementAt(0).ToString(),"Cantitate: " + cantitate,"Total Plata: " + suma, "Data emitere:" + publishedOrders.PublishedDate.ToShortDateString()};
-            File.WriteAllLines(fullPath, file);
+            await File.WriteAllLinesAsync(fullPath, file);
             
             return publishedOrders.Match<Either<IComenzi, PublishedOrders>>(
                 whenUnvalidatedOrders: unvalidatedOrders => Left(unvalidatedOrders as IComenzi),
