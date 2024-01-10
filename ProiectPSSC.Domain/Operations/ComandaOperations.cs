@@ -28,15 +28,15 @@ namespace ProiectPSSC.Domain.Operations
 
         private static EitherAsync<string, ValidatedComanda> ValidateOrder(Func<Nume, Option<Nume>> checkUserExists, Func<Cantitate, NumeProdus, Option<Cantitate>> checkStock, Func<NumeProdus, Option<NumeProdus>> checkProductExists, UnvalidatedComanda unvalidatedOrder,int price) =>
             from cantitate in Cantitate.TryParseCantitate(unvalidatedOrder.Cantitate)
-                                   .ToEitherAsync($"Invalid Cantitate ({unvalidatedOrder.Nume}, {unvalidatedOrder.Cantitate})")
+                                   .ToEitherAsync($"Invalid Cantitate({unvalidatedOrder.Cantitate})")
             from nume in Nume.TryParse(unvalidatedOrder.Nume)
-                                   .ToEitherAsync($"Invalid Name ({unvalidatedOrder.Nume}, {unvalidatedOrder.Nume})")
+                                   .ToEitherAsync($"Invalid Name({unvalidatedOrder.Nume})")
             from numeProdus in NumeProdus.TryParse(unvalidatedOrder.NumeProdus)
                                    .ToEitherAsync($"Invalid NumeProdus ({unvalidatedOrder.NumeProdus})")
             from adresa in Adresa.TryParse(unvalidatedOrder.Adresa)
                                .ToEitherAsync($"Invalid Adresa ({unvalidatedOrder.Adresa})")
             from pret in Cantitate.TryParseCantitate(price)
-                           .ToEitherAsync($"Invalid PretTotal ({unvalidatedOrder.Cantitate})")
+                           .ToEitherAsync($"Invalid PretTotal")
             from userExists in checkUserExists(nume)
                                    .ToEitherAsync($"User {nume.Value} does not exist.")
             from productExists in checkProductExists(numeProdus)
