@@ -50,8 +50,7 @@ namespace ProiectPSSC.Domain.Workflows
                                           .ToEither(ex => new FailedOrders(unvalidatedOrders.CommandList, ex) as IComenzi)
                          let checkUserExists = (Func<Nume, Option<Nume>>)(user => CheckUserExists(users, user))
                          let checkProductExists = (Func<NumeProdus, Option<NumeProdus>>)(product => CheckProductExists(products, product))
-                         let checkStock = (Func<Cantitate,NumeProdus, Option<Cantitate>>)((stock, numeProdus) => CheckStock(products,stocks, stock, numeProdus))
-                         
+                         let checkStock = (Func<Cantitate,NumeProdus, Option<Cantitate>>)((stock, numeProdus) => CheckStock(products,stocks, stock, numeProdus))                        
                          //let checkStock = (Func<Cantitate, Option<NumeProdus>>)(product => CheckStoc(products, product))
                          from publishedOrders in ExecuteWorkflowAsync(unvalidatedOrders, existingOrders,price, checkUserExists,checkStock,checkProductExists).ToAsync()
                          from _ in commandsRepository.TrySaveOrders(publishedOrders)

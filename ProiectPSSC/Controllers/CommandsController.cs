@@ -20,7 +20,6 @@ namespace ProiectPSSC.Controllers
     {
         private ILogger<CommandsController> logger;
         private readonly PublishComandaWorkflow publishOrderWorkflow;
-
         private readonly FacturareWorkflowv2 facturareWorkflowV2;
         private readonly IHttpClientFactory _httpClientFactory;
 
@@ -87,7 +86,7 @@ namespace ProiectPSSC.Controllers
         {
             var httpRequestMessage = new HttpRequestMessage(
             HttpMethod.Post,
-            "https://localhost:7286/report/semester-report")
+            "https://localhost:7286/report/order-report")
             {
                 Content = new StringContent(JsonConvert.SerializeObject(successEvent), Encoding.UTF8, "application/json")
             };
@@ -100,7 +99,7 @@ namespace ProiectPSSC.Controllers
         {
             var httpRequestMessage = new HttpRequestMessage(
             HttpMethod.Post,
-            "https://localhost:7286/report/scholarship")
+            "https://localhost:7286/report/order")
             {
                 Content = new StringContent(JsonConvert.SerializeObject(successEvent), Encoding.UTF8, "application/json")
             };

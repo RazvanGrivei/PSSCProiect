@@ -7,8 +7,7 @@ using System.Threading.Tasks;
 namespace ProiectPSSC.Data.Models
 {
     public class UtilizatorDto
-    {
-        
+    {        
         public int ID_Utilizator { get; set; }
         public string? Nume { get; set; }
         public string? Adresa { get; set; }

@@ -8,7 +8,6 @@ namespace ProiectPSSC.Data
         public ComandaContext(DbContextOptions<ComandaContext> options) : base(options)
         {
         }
-
         public DbSet<UtilizatorDto> Users { get; set; }
         public DbSet<ComandaDto> Commands { get; set; }
         //public DbSet<DetaliiComanda> Details { get; set; }

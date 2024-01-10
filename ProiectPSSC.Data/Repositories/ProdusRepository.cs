@@ -17,8 +17,7 @@ namespace ProiectPSSC.Data.Repositories
 {
     public class ProdusRepository: IProdusRepository
     {
-        private readonly ComandaContext comandaContext;
-  
+        private readonly ComandaContext comandaContext; 
 
         public ProdusRepository(ComandaContext comandaContext)
         {

@@ -23,7 +23,6 @@ namespace ProiectPSSC.Data.Repositories
             this.dbContext = dbContext;
 
         }
-
         
         public TryAsync<List<CalculatedComanda>> TryGetExistingOrders() => async () => (await (
                           from g in dbContext.Commands
@@ -96,6 +95,7 @@ namespace ProiectPSSC.Data.Repositories
 
             return unit;
         };
+
         public TryAsync<Unit> TryPayOrder(string nume) => async () =>
         {
             var users = (await dbContext.Users.Where(g => g.Nume == nume).ToListAsync()).ToLookup(user => user.Nume);
