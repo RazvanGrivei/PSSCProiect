@@ -11,7 +11,9 @@ namespace ProiectPSSC.Domain.Models
 {
     public record Nume
     {
-       
+        public const string Pattern = "^[a-zA-Z ]+$";
+        private static readonly Regex PatternRegex = new(Pattern);
+
         public string? Value { get; }
         public Nume(string value)
         {   
@@ -22,7 +24,7 @@ namespace ProiectPSSC.Domain.Models
         {
             return Value;
         }
-        private static bool IsValid(string stringValue) => stringValue.All(char.IsLetter);
+        private static bool IsValid(string stringValue) => PatternRegex.IsMatch(stringValue);
         public static Option<Nume> TryParse(string stringValue)
         {
             if (IsValid(stringValue))
