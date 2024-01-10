@@ -13,7 +13,7 @@ namespace ProiectPSSC.Domain.Repositories
     public interface IComandaRepository
     {
         TryAsync<List<CalculatedComanda>> TryGetExistingOrders();
-        TryAsync<List<CalculatedComanda>> TryPayOrder(string nume);
+        TryAsync<Unit> TryPayOrder(string nume);
         TryAsync<Unit> TrySaveOrders(PublishedOrders orders);
     }
 }

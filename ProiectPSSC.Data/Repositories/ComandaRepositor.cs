@@ -24,26 +24,7 @@ namespace ProiectPSSC.Data.Repositories
 
         }
 
-        public TryAsync<List<CalculatedComanda>> TryPayOrder(string nume) => async () => (await (
-                          from g in dbContext.Commands
-                          join f in dbContext.Products on g.ID_Produs equals f.ID_Produs
-                          join s in dbContext.Users on g.ID_Utilizator equals s.ID_Utilizator
-                          select new { s.Nume, s.Adresa, f.NumeProdus, g.Cantitate, g.PretTotal, g.ID_Comanda })
-                          .AsNoTracking()
-                          .ToListAsync())
-                          .Where(result => result.Nume == nume)
-                          .Select(result => new CalculatedComanda(
-                                                    Nume: new(result.Nume),
-                                                    Adresa: new(result.Adresa),
-                                                    NumeProdus: new(result.NumeProdus),
-                                                    Cantitate: new(result.Cantitate),
-                                                    PretTotal: new(result.PretTotal))
-
-
-                          {
-                              ID_Comanda = result.ID_Comanda
-                          })
-                          .ToList();
+        
         public TryAsync<List<CalculatedComanda>> TryGetExistingOrders() => async () => (await (
                           from g in dbContext.Commands
                           join f in dbContext.Products on g.ID_Produs equals f.ID_Produs
@@ -115,7 +96,20 @@ namespace ProiectPSSC.Data.Repositories
 
             return unit;
         };
-       
-        }
+        public TryAsync<Unit> TryPayOrder(string nume) => async () =>
+        {
+            var users = (await dbContext.Users.Where(g => g.Nume == nume).ToListAsync()).ToLookup(user => user.Nume);
+            var products = (await dbContext.Products.ToListAsync()).ToLookup(produs => produs.NumeProdus);
+            //var orders = (await dbContext.Commands.ToListAsync()).ToLookup(produs => produs.ID_Comanda);
+            var orders = (await dbContext.Commands.Where(g => g.ID_Utilizator == users[nume].Single().ID_Utilizator).ToListAsync()).ToLookup(produs => produs.ID_Comanda);
+
+            dbContext.RemoveRange(orders);
+
+            await dbContext.SaveChangesAsync();
+
+            return unit;
+        };
+
+    }
         
 }
