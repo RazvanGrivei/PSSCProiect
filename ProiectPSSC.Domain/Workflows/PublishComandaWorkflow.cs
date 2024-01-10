@@ -59,13 +59,16 @@ namespace ProiectPSSC.Domain.Workflows
             
             return await result.Match(
                     Left: orders => GenerateFailedEvent(orders) as IComandaPublishedEvent,
-                    Right:publishedOrders => {facturareWorkflowv2.ExecuteWorkflowAsync(publishedOrders).ToAsync();livrareWorkflow.ExecuteWorkflowAsync(publishedOrders).ToAsync(); return new ComandaPublishScucceededEvent(publishedOrders.Csv, publishedOrders.PublishedDate); }
+                    Right:publishedOrders => {
+                        facturareWorkflowv2.ExecuteWorkflowAsync(publishedOrders).ToAsync();
+                        livrareWorkflow.ExecuteWorkflowAsync(publishedOrders).ToAsync(); 
+                        return new ComandaPublishScucceededEvent(publishedOrders.Csv, publishedOrders.PublishedDate); 
+                    }
             );
         }
 
-        private async Task<Either<IComenzi, PublishedOrders>> ExecuteWorkflowAsync(UnvalidatedOrders unvalidatedOrders,
-                                                                                          IEnumerable<CalculatedComanda> existingOrders,int price,
-                                                                                          Func<Nume, Option<Nume>> checkUserExists, Func<Cantitate, NumeProdus, Option<Cantitate>> checkStock, Func<NumeProdus, Option<NumeProdus>> checkProductExists)
+        private async Task<Either<IComenzi, PublishedOrders>> ExecuteWorkflowAsync(UnvalidatedOrders unvalidatedOrders,IEnumerable<CalculatedComanda> existingOrders,int price,
+                                                                                   Func<Nume, Option<Nume>> checkUserExists, Func<Cantitate, NumeProdus, Option<Cantitate>> checkStock, Func<NumeProdus, Option<NumeProdus>> checkProductExists)
         {
 
             IComenzi orders = await ComandaOperations.ValidateOrders(checkUserExists,checkStock, checkProductExists, unvalidatedOrders,price);
